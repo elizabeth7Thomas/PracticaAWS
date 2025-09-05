@@ -103,4 +103,4 @@ export class InventarioService {
     return inventarios;
   }
 }
-// modificacion de borrado logico
+// modificacion de borrado logico primer commit
