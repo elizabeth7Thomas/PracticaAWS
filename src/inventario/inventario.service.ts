@@ -11,8 +11,12 @@ export class InventarioService {
     private readonly inventarioRepo: Repository<Inventario>,
   ) {}
 
-  findAll() {
-    return this.inventarioRepo.find({ relations: ['producto'] });
+  async findAll() {
+    // Solo inventarios activos (estadoInventario = 1)
+    return this.inventarioRepo.find({
+      where: { estadoInventario: 1 },
+      relations: ['producto'],
+    });
   }
 
   async findOne(id: number) {
@@ -44,18 +48,23 @@ export class InventarioService {
 
   async remove(id: number) {
     const inventario = await this.findOne(id);
-    return this.inventarioRepo.remove(inventario);
+    if (!inventario) {
+      throw new NotFoundException(`Inventario con id ${id} no encontrado`);
+    }
+
+    inventario.estadoInventario = 0; // 👈 Borrado lógico
+    return this.inventarioRepo.save(inventario);
   }
 
   async findInventariosVencidos() {
-    const vencidos = this.inventarioRepo
+    const vencidos = await this.inventarioRepo
       .createQueryBuilder('inventario')
       .leftJoinAndSelect('inventario.producto', 'producto')
-      .where('inventario.estadoInventario = :estado', { estado: 0}) //Estado 2 para productos vencidos
+      .where('inventario.estadoInventario = :estado', { estado: 0 }) // Estado 0 para inactivos
       .andWhere('inventario.cantidad > 0')
       .getMany();
 
-    if (!vencidos) {
+    if (!vencidos || vencidos.length === 0) {
       throw new NotFoundException('No se encontraron inventarios vencidos');
     }
 
@@ -81,7 +90,7 @@ export class InventarioService {
       .createQueryBuilder('inventario')
       .leftJoinAndSelect('inventario.producto', 'producto')
       .where('producto.idProducto = :idProducto', { idProducto })
-      .andWhere('inventario.estadoInventario = :estado', { estado: 1 }) // Estado 1 para inventarios activos
+      .andWhere('inventario.estadoInventario = :estado', { estado: 1 }) // Solo activos
       .orderBy('inventario.idInventario', 'DESC')
       .getMany();
 
