@@ -29,18 +29,13 @@ async function bootstrap() {
       process.env.FRONTEND_ORIGIN,
       'http://localhost:8000',
       'http://172.19.0.4:8000',
-      'http://20.14.74.107:8000'
+      'http://20.14.74.107:8000',
     ],
   });
 
   app.useGlobalPipes(new ValidationPipe({}));
 
-
-  app.useGlobalPipes(
-    new ValidationPipe({
-
-    })
-  );
+  app.useGlobalPipes(new ValidationPipe({}));
 
   await app.listen(process.env.PORT ?? 2125, '0.0.0.0');
 }
