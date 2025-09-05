@@ -1,0 +1,12 @@
+DELIMITER $$
+
+CREATE TRIGGER actualizar_estado_inventario
+BEFORE UPDATE ON Inventario
+FOR EACH ROW
+BEGIN
+    IF NEW.fechaCaducidad < CURDATE() THEN
+        SET NEW.estadoInventario = 0;
+    END IF;
+END$$
+
+DELIMITER ;

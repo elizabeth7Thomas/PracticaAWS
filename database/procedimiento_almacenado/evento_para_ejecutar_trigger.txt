@@ -1,0 +1,6 @@
+CREATE EVENT actualizar_inventario_diario
+ON SCHEDULE EVERY 1 DAY
+DO
+    UPDATE Inventario
+    SET estadoInventario = 0
+    WHERE fechaCaducidad < CURDATE();

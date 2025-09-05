@@ -1,0 +1,8 @@
+Se modificaron los campos UpdatedAt y createdAt de la tabla inventario 
+
+USE ecommerce;
+ALTER TABLE inventario 
+  MODIFY createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE inventario 
+  MODIFY updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
