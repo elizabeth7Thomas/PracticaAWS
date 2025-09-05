@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `categoria` (
   `idCategoria` int NOT NULL AUTO_INCREMENT,
   `descripcionC` varchar(255) NOT NULL,
   `nombreC` varchar(255) NOT NULL,
-  PRIMARY KEY (`idCategoria`)
+  PRIMARY KEY (`idCategoria`)Ñ
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla ecommerce.categoria: ~16 rows (aproximadamente)

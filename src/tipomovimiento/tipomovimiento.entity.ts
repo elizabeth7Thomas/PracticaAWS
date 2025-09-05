@@ -10,4 +10,8 @@ export class Tipomovimiento {
   @Column({ unique: true })
   @ApiProperty({ example: 'Entrada' })
   tipoM: string;
+
+  @Column({ nullable: true })
+  @ApiProperty({ example: '1' })
+  estado: number;
 }

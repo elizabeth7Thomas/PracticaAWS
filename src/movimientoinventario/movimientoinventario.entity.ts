@@ -26,4 +26,7 @@ export class MovimientoInventario {
   @ManyToOne(() => Inventario)
   @JoinColumn({ name: 'idInventario' })
   inventario: Inventario;
+  
+  @Column({ type: 'tinyint', default: 1 })
+  estado: number;
 }

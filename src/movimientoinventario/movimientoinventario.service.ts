@@ -40,23 +40,21 @@ export class MovimientoinventarioService {
 
 
   async createDeshabilitado(inventarioId: number): Promise<MovimientoInventario> {
-   
     const inventario = await this.inventarioRepo.findOne({
       where: { idInventario: inventarioId },
     });
     if (!inventario) {
       throw new NotFoundException('Inventario no encontrado');
     }
-
     const tipoMovimiento = await this.tipoRepo.findOne({
-      where: { tipoM: 'Deshabilitado' }, 
+      where: { tipoM: 'Deshabilitado' },
     });
     if (!tipoMovimiento) {
       throw new NotFoundException('Tipo de movimiento "Deshabilitado" no encontrado');
     }
 
     const movimiento = this.movimientoRepo.create({
-      cantidadM: (inventario as any).cantidad || 0, 
+      cantidadM: (inventario as any).cantidad || 0,
       tipoMovimiento,
       inventario,
     });
@@ -66,13 +64,14 @@ export class MovimientoinventarioService {
 
   findAll(): Promise<MovimientoInventario[]> {
     return this.movimientoRepo.find({
+      where: { estado: 1 },
       relations: ['tipoMovimiento', 'inventario'],
     });
   }
 
   async findOne(id: number): Promise<MovimientoInventario> {
     const movimiento = await this.movimientoRepo.findOne({
-      where: { idMovimientoInventario: id },
+      where: { idMovimientoInventario: id, estado: 1 },
       relations: ['tipoMovimiento', 'inventario'],
     });
     if (!movimiento) throw new NotFoundException('Movimiento no encontrado');
@@ -102,7 +101,6 @@ export class MovimientoinventarioService {
   }
 
   async remove(id: number): Promise<void> {
-    const movimiento = await this.findOne(id);
-    await this.movimientoRepo.remove(movimiento);
+    await this.movimientoRepo.update(id, { estado: 0 });
   }
 }
